@@ -35,26 +35,23 @@ X_train_pm_25, X_test_pm_25, y_train_pm_25, y_test_pm_25 = train_test_split(X, y
 """Model"""
 
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.multioutput import MultiOutputRegressor
-from xgboost import XGBRegressor
+from xgboost import XGBClassifier
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
-model_pm_25 = MultiOutputRegressor(
-    XGBRegressor(
-        n_estimators=100,
-        learning_rate=0.5,
-        max_depth=6,
-        subsample=0.8,
-        colsample_bytree=0.8,
-        random_state=42,
-        n_jobs=-1
-    )
+model_pm_25 = XGBClassifier(
+    n_estimators=100,
+    learning_rate=0.5,
+    max_depth=6,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    random_state=42,
+    n_jobs=-1
 )
-model_pm_25.fit(X_train_pm_25, y_train_pm_25)
 
-from sklearn.multioutput import MultiOutputRegressor
+model_pm_25.fit(X_train_pm_25, y_train_pm_25.values.ravel())
+
 import joblib
 
 joblib.dump(model_pm_25, 'PM25_model.joblib')
